@@ -33,7 +33,7 @@ public class PlayerControllerScript : MonoBehaviour
         {
             if (hidden)
                 return;
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
             return;
         }
         if (collision.gameObject.tag == "Exit")
