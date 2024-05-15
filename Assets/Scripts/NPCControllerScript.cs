@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class NPCControllerScript : MonoBehaviour
 {
@@ -15,24 +17,43 @@ public class NPCControllerScript : MonoBehaviour
         waypoints = wplist.GetComponentsInChildren<Transform>().ToList();
         waypoints = (from waypoint in waypoints where waypoint.name != wplist.name select waypoint).ToList();
         transform.position = waypoints[0].position;
-        float angle = Mathf.Atan2(waypoints[1].position.y - waypoints[0].position.y, waypoints[1].position.x - waypoints[0].position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        transform.rotation = targetRotation;
+        Vector3 directionToTarget = waypoints[1].position - waypoints[0].position;
+        float targetAngle = Mathf.Atan2(directionToTarget.y,directionToTarget.x)*Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, targetAngle);
         current = 1;
         speed = Random.Range(minSpeed, maxSpeed);
+        StartCoroutine(Patrol());
     }
 
-    private void Update()
+    private IEnumerator Patrol()
     {
-        transform.position = Vector3.MoveTowards(transform.position, waypoints[current].position, speed*Time.deltaTime);
-        if (Vector3.Distance(transform.position, waypoints[current].position) < .001f)
+        while (true)
         {
-            float randomNumber = Random.Range(0, waypoints.Count);
-            current = (int)Mathf.Floor(randomNumber);
-            float angle = Mathf.Atan2(waypoints[current].position.y - transform.position.y, waypoints[current].position.x - transform.position.x) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            transform.rotation = targetRotation;
-            speed = Random.Range(minSpeed, maxSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, waypoints[current].position, speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, waypoints[current].position) < .001f)
+            {
+                float randomNumber = Random.Range(0, waypoints.Count);
+                current = (int)Mathf.Floor(randomNumber);
+                yield return StartCoroutine(Turn(waypoints[current = (current + 1)%waypoints.Count]));
+                speed = Random.Range(minSpeed, maxSpeed);
+            }
+            yield return null;
         }
+    }
+
+    private IEnumerator Turn(Transform target)
+    {
+        Vector3 directionToTarget = target.position - transform.position;
+        float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
+        float startAngle = transform.eulerAngles.z;
+        float elapsedTime = 0f;
+        while (elapsedTime < speed)
+        {
+            float angle = Mathf.LerpAngle(startAngle, targetAngle, elapsedTime / speed);
+            transform.rotation = Quaternion.Euler(0, 0, angle);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.rotation = Quaternion.Euler(0, 0, targetAngle);
     }
 }
