@@ -34,7 +34,7 @@ public class NPCControllerScript : MonoBehaviour
             {
                 float randomNumber = Random.Range(0, waypoints.Count);
                 current = (int)Mathf.Floor(randomNumber);
-                yield return StartCoroutine(Turn(waypoints[current = (current + 1)%waypoints.Count]));
+                yield return StartCoroutine(Turn(waypoints[current]));
                 speed = Random.Range(minSpeed, maxSpeed);
             }
             yield return null;
