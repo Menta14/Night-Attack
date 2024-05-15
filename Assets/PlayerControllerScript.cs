@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,14 @@ public class PlayerControllerScript : MonoBehaviour
     private SpriteRenderer spr;
     private bool hidden = false;
 
+    void Start()
+    {
+        GameObject[] wps = GameObject.FindGameObjectsWithTag("Waypoint");
+        foreach (GameObject wp in wps)
+        {
+            wp.GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
     void FixedUpdate()
     {
         transform.position += new Vector3(Input.GetAxis("Horizontal")*speed*Time.fixedDeltaTime, Input.GetAxis("Vertical")*speed*Time.fixedDeltaTime, 0);
@@ -23,6 +32,13 @@ public class PlayerControllerScript : MonoBehaviour
         {
             spr.color = Color.black;
             hidden = true;
+            return;
+        }
+        if (collision.gameObject.tag == "Guard")
+        {
+            if (hidden)
+                return;
+            SceneManager.LoadScene(0);
             return;
         }
         if (collision.gameObject.tag == "Exit")
@@ -42,11 +58,9 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Guard")
+        if(collision.gameObject.tag == "NPCbody")
         {
-            if (hidden)
-                return;
-            SceneManager.LoadScene(0);
+            Destroy(collision.gameObject);
         }
     }
 }
