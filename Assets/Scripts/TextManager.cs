@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class TextManager : MonoBehaviour
 {
-    public float animationSpeed = 2f;
     private List<TextMeshProUGUI> seq;
     private int current;
 
