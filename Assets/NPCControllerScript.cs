@@ -8,6 +8,7 @@ public class NPCControllerScript : MonoBehaviour
     public Transform[] waypoints;
     public float speed;
     private int current;
+
     private void Start()
     {
         transform.position = waypoints[0].position;

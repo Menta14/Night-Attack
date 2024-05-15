@@ -11,9 +11,9 @@ public class PlayerControllerScript : MonoBehaviour
     private SpriteRenderer spr;
     private bool hidden = false;
 
-    void Update()
+    void FixedUpdate()
     {
-        transform.position += new Vector3(Input.GetAxis("Horizontal")*speed*Time.deltaTime, Input.GetAxis("Vertical")*speed*Time.deltaTime, 0);
+        transform.position += new Vector3(Input.GetAxis("Horizontal")*speed*Time.fixedDeltaTime, Input.GetAxis("Vertical")*speed*Time.fixedDeltaTime, 0);
         spr = gameObject.GetComponent<SpriteRenderer>();
     }
 
