@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,11 +16,12 @@ public class TentManager : MonoBehaviour
             answers[i].text = PlayerControllerScript.answers[i];
         }
         correct = PlayerControllerScript.correct;
+        SceneManager.sceneLoaded += onSceneLoad;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (SceneManager.loadedSceneCount == 2 && Input.GetMouseButtonDown(0))
         {
             Vector2 rayOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.zero);
@@ -33,11 +32,22 @@ public class TentManager : MonoBehaviour
                 {
                     string submit = comp.text;
                     if (submit == correct)
-                        SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene());
+                        SceneManager.UnloadSceneAsync("Tent");
                     else
-                        SceneManager.LoadScene("Level 1");
+                        SceneManager.LoadScene("Game over", LoadSceneMode.Additive);
                 }
             }
         }
+    }
+
+    private void onSceneLoad(Scene loadedScene, LoadSceneMode loadSceneMode)
+    {
+        GameObject canvas = GameObject.FindGameObjectWithTag("Unlinked");
+        canvas.GetComponent<Canvas>().worldCamera = Camera.main;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= onSceneLoad;
     }
 }

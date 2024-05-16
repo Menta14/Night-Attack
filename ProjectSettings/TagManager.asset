@@ -10,6 +10,7 @@ TagManager:
   - Wall
   - Waypoint
   - NPCbody
+  - Unlinked
   layers:
   - Default
   - TransparentFX

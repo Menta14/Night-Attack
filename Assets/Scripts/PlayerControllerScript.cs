@@ -1,5 +1,3 @@
-using JetBrains.Annotations;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,6 +16,7 @@ public class PlayerControllerScript : MonoBehaviour
         {
             wp.GetComponent<SpriteRenderer>().enabled = false;
         }
+        SceneManager.sceneLoaded += onSceneLoad;
         SceneManager.sceneUnloaded += onSceneUnloaded;
     }
     void FixedUpdate()
@@ -40,19 +39,19 @@ public class PlayerControllerScript : MonoBehaviour
                 answers = data.answers;
                 correct = data.correct;
                 transform.position = collision.gameObject.GetComponent<Renderer>().bounds.center;
-                StartCoroutine(EnterTent());
+                SceneManager.LoadScene("Tent", LoadSceneMode.Additive);
             }
         }
         if (collision.gameObject.tag == "Guard")
         {
             if (hidden)
                 return;
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene("Game over", LoadSceneMode.Additive);
             return;
         }
         if (collision.gameObject.tag == "Exit")
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene("Level 2");
         }
     }
 
@@ -73,9 +72,35 @@ public class PlayerControllerScript : MonoBehaviour
         }
     }
 
+    private void onSceneLoad(Scene loadedScene, LoadSceneMode loadSceneMode)
+    {
+        if (loadedScene.name == "Game over")
+        {
+            GameObject canvas = GameObject.FindGameObjectWithTag("Unlinked");
+            canvas.GetComponent<Canvas>().worldCamera = Camera.main;
+
+            spr.color = Color.black;
+            speed = 0f;
+            GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPCbody");
+            Collider2D curr = GetComponent<Collider2D>();
+            foreach (GameObject body in npcs)
+            {
+                if (body == gameObject)
+                    continue;
+                Physics2D.IgnoreCollision(curr, body.GetComponent<Collider2D>());
+                Physics2D.IgnoreCollision(curr, body.transform.GetChild(0).GetComponent<Collider2D>());
+            }
+        }
+        else
+            foreach (GameObject gameObject in SceneManager.GetSceneByName("Level 1").GetRootGameObjects())
+            {
+                gameObject.SetActive(false);
+            }
+    }
+
     private void onSceneUnloaded(Scene unloadedScene)
     {
-        foreach (GameObject obj in SceneManager.GetActiveScene().GetRootGameObjects())
+        foreach (GameObject obj in SceneManager.GetSceneByName("Level 1").GetRootGameObjects())
         {
             obj.SetActive(true);
         }
@@ -83,21 +108,7 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void OnDestroy()
     {
+        SceneManager.sceneLoaded -= onSceneLoad;
         SceneManager.sceneUnloaded -= onSceneUnloaded;
-    }
-
-    private IEnumerator EnterTent()
-    {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Tent", LoadSceneMode.Additive);
-
-        while (!asyncLoad.isDone)
-        {
-            yield return null;
-        }
-        foreach (GameObject obj in SceneManager.GetActiveScene().GetRootGameObjects())
-        {
-            obj.SetActive(false);
-        }
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Tent"));
     }
 }

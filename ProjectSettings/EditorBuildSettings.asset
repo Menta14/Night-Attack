@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Tent.unity
     guid: 81b86c3a1d92e9b4ca3117f2a6512f2c
   - enabled: 1
+    path: Assets/Scenes/Game over.unity
+    guid: fc19b67187778f141803446b4c99ab85
+  - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1

@@ -111,7 +111,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.040244635, b: 0, a: 1}
   m_FlipX: 0
@@ -288,7 +288,7 @@ SpriteShapeRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: -876546973899608171, guid: 9b4e681081e2b4c469111bb649e2f7ee, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -308,8 +308,8 @@ SpriteShapeRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_SortingOrder: 3
+  m_Color: {r: 1, g: 1, b: 1, a: 0.20392157}
   m_MaskInteraction: 0
   m_ShapeTexture: {fileID: 2800000, guid: b281b91a70a624a0da1c43adc1c30c7b, type: 3}
   m_Sprites:
@@ -323,8 +323,8 @@ SpriteShapeRenderer:
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   - {fileID: 21300000, guid: 608e61deb05c54660bebf5a4dd2ee02d, type: 3}
   m_LocalAABB:
-    m_Center: {x: -0.00006341934, y: -0.50023174, z: 0}
-    m_Extent: {x: 4.4031687, y: 1.7501073, z: 0}
+    m_Center: {x: -0.0047101974, y: -0.4816519, z: 0}
+    m_Extent: {x: 4.715128, y: 1.9714481, z: 0}
   m_SpriteSortPoint: 1
 --- !u!114 &2466516436888467441
 MonoBehaviour:
@@ -341,33 +341,33 @@ MonoBehaviour:
   m_Spline:
     m_IsOpenEnded: 0
     m_ControlPoints:
-    - position: {x: -0.5, y: -2, z: 0}
-      leftTangent: {x: 0.53597367, y: -0.00048214197, z: -0}
-      rightTangent: {x: -0.53597367, y: 0.00048214197, z: 0}
+    - position: {x: -0.65, y: -2.2, z: 0}
+      leftTangent: {x: 0.5359734, y: -0.0004823208, z: 0}
+      rightTangent: {x: -0.53597337, y: 0.00048184395, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 2
-    - position: {x: -4, y: 1, z: 0}
-      leftTangent: {x: -1.0023332, y: 0.0010559559, z: 0}
-      rightTangent: {x: 1.0023332, y: -0.0010559559, z: -0}
+    - position: {x: -4.032474, y: 1.24, z: 0}
+      leftTangent: {x: -1.9208493, y: 0.025227547, z: 0}
+      rightTangent: {x: 1.0022426, y: -0.013162851, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 2
-    - position: {x: 4, y: 1, z: 0}
-      leftTangent: {x: -1.0005913, y: -0.0016920567, z: -0}
-      rightTangent: {x: 1.0005913, y: 0.0016920567, z: 0}
+    - position: {x: 4.0081024, y: 1.24, z: 0}
+      leftTangent: {x: -0.99993706, y: -0.0361619, z: 0}
+      rightTangent: {x: 1.9215007, y: 0.06948924, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
       corner: 1
       m_CornerMode: 2
-    - position: {x: 0.5, y: -2, z: 0}
-      leftTangent: {x: 0.54391515, y: 0.0004222989, z: 0}
-      rightTangent: {x: -0.54391515, y: -0.0004222989, z: -0}
+    - position: {x: 0.8, y: -2.2030592, z: 0}
+      leftTangent: {x: 0.54391474, y: 0.0004222393, z: 0}
+      rightTangent: {x: -0.54391474, y: -0.00042295456, z: 0}
       mode: 1
       height: 1
       spriteIndex: 0
@@ -383,7 +383,7 @@ MonoBehaviour:
   m_CornerAngleThreshold: 30
   m_ColliderDetail: 16
   m_ColliderOffset: 0.5
-  m_UpdateCollider: 1
+  m_UpdateCollider: 0
   m_EnableTangents: 0
   m_GeometryCached: 0
   m_UTess2D: 1
@@ -563,6 +563,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3147306223903214724}
     m_Modifications:
+    - target: {fileID: 825562330176851416, guid: 229f1b3af757d9541933a492d2116e3e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3186176276044882929, guid: 229f1b3af757d9541933a492d2116e3e, type: 3}
       propertyPath: m_Name
       value: 1

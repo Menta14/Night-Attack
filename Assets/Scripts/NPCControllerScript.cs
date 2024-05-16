@@ -24,12 +24,12 @@ public class NPCControllerScript : MonoBehaviour
     private void Start()
     {
         GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPCbody");
-        CircleCollider2D curr = GetComponent<CircleCollider2D>();
+        Collider2D curr = GetComponent<Collider2D>();
         foreach (GameObject body in npcs)
         {
             if (body == gameObject)
                 continue;
-            Physics2D.IgnoreCollision(curr, body.GetComponent<CircleCollider2D>());
+            Physics2D.IgnoreCollision(curr, body.GetComponent<Collider2D>());
         }
         waypoints = wplist.GetComponentsInChildren<Transform>().ToList();
         waypoints = (from waypoint in waypoints where waypoint.name != wplist.name select waypoint).ToList();
