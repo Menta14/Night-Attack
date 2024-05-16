@@ -5,11 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class TextManager : MonoBehaviour
 {
+    public AudioClip finalMusic;
     private List<TextMeshProUGUI> seq;
+    private TextMeshProUGUI info;
     private int current;
 
     private void Start()
     {
+        info = transform.Find("Canvas_static").GetChild(0).GetComponent<TextMeshProUGUI>();
         seq = new List<TextMeshProUGUI>();
         Transform canvas = transform.Find("Canvas");
         for (int i = 0; i < canvas.childCount; i++) {
@@ -29,11 +32,23 @@ public class TextManager : MonoBehaviour
                 if (SceneManager.GetActiveScene().name == "Intro")
                     SceneManager.LoadScene("Level 1");
                 else
-                    Application.Quit();
+                    SceneManager.LoadScene("Intro");
                 return;
             }
             seq[current].enabled = false;
             seq[++current].enabled = true;
+            if (current == seq.Count - 1 && SceneManager.GetActiveScene().name == "Ending")
+            {
+                info.text = "apasa [space] pentru a reincepe jocul\napasa [escape] pentru a iesi din joc";
+                AudioSource audioSource = GetComponent<AudioSource>();
+                audioSource.Stop();
+                audioSource.loop = false;
+                audioSource.PlayOneShot(finalMusic);
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.Escape) && current == seq.Count - 1)
+        {
+            Application.Quit();
         }
     }
 }

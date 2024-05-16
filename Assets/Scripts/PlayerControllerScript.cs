@@ -1,27 +1,32 @@
+using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class PlayerControllerScript : MonoBehaviour
 {
     public float speed = 2f;
+    private float actualSpeed = 2f;
     private SpriteRenderer spr;
     private bool hidden = false;
     public static string question;
     public static string[] answers;
     public static string correct;
+    private Vector3 snap2D = new Vector3(1, 1, 0);
     void Start()
     {
+        actualSpeed = speed;
         GameObject[] wps = GameObject.FindGameObjectsWithTag("Waypoint");
         foreach (GameObject wp in wps)
         {
             wp.GetComponent<SpriteRenderer>().enabled = false;
         }
         SceneManager.sceneLoaded += onSceneLoad;
-        SceneManager.sceneUnloaded += onSceneUnloaded;
+        SceneManager.sceneUnloaded += onSceneUnload;
     }
     void FixedUpdate()
     {
-        transform.position += new Vector3(Input.GetAxis("Horizontal")*speed*Time.fixedDeltaTime, Input.GetAxis("Vertical")*speed*Time.fixedDeltaTime, 0);
+        transform.position += new Vector3(Input.GetAxis("Horizontal")*actualSpeed*Time.fixedDeltaTime, Input.GetAxis("Vertical")*actualSpeed*Time.fixedDeltaTime, 0);
         spr = gameObject.GetComponent<SpriteRenderer>();
     }
 
@@ -79,13 +84,15 @@ public class PlayerControllerScript : MonoBehaviour
 
     private void onSceneLoad(Scene loadedScene, LoadSceneMode loadSceneMode)
     {
+        GameObject unlinkedCanvas = GameObject.FindGameObjectWithTag("Unlinked");
+        unlinkedCanvas.GetComponent<Canvas>().worldCamera = Camera.main;
+        if (loadedScene.name == "Tent")
+            GameObject.Find("Question_light").transform.position = Vector3.Scale(Camera.main.transform.position, snap2D);
+
         if (loadedScene.name == "Game over")
         {
-            GameObject canvas = GameObject.FindGameObjectWithTag("Unlinked");
-            canvas.GetComponent<Canvas>().worldCamera = Camera.main;
-
             spr.color = Color.black;
-            speed = 0f;
+            actualSpeed = 0f;
             GameObject[] npcs = GameObject.FindGameObjectsWithTag("NPCbody");
             Collider2D curr = GetComponent<Collider2D>();
             foreach (GameObject body in npcs)
@@ -97,23 +104,17 @@ public class PlayerControllerScript : MonoBehaviour
             }
         }
         else
-            foreach (GameObject gameObject in SceneManager.GetSceneByName("Level 1").GetRootGameObjects())
-            {
-                gameObject.SetActive(false);
-            }
+            actualSpeed = 0f;
     }
 
-    private void onSceneUnloaded(Scene unloadedScene)
+    private void onSceneUnload(Scene unloadedScene)
     {
-        foreach (GameObject obj in SceneManager.GetSceneByName("Level 1").GetRootGameObjects())
-        {
-            obj.SetActive(true);
-        }
+        actualSpeed = speed;
     }
 
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= onSceneLoad;
-        SceneManager.sceneUnloaded -= onSceneUnloaded;
+        SceneManager.sceneUnloaded -= onSceneUnload;
     }
 }

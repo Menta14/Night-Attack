@@ -37,7 +37,10 @@ public class TentManager : MonoBehaviour
                         SceneManager.UnloadSceneAsync("Tent");
                     }
                     else
+                    {
+                        SceneManager.UnloadSceneAsync("Tent");
                         SceneManager.LoadScene("Game over", LoadSceneMode.Additive);
+                    }
                 }
             }
         }
