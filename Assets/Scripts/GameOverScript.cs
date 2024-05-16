@@ -1,15 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameOverScript : MonoBehaviour
 {
-    private void Start()
-    {
-        
-    }
     private void Update()
     {
         if (Input.GetMouseButtonDown(0))

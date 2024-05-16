@@ -46,7 +46,7 @@ public class TextManager : MonoBehaviour
                 audioSource.PlayOneShot(finalMusic);
             }
         }
-        else if (Input.GetKeyUp(KeyCode.Escape) && current == seq.Count - 1)
+        else if (Input.GetKeyUp(KeyCode.Escape))
         {
             Application.Quit();
         }

@@ -1,6 +1,4 @@
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class PlayerControllerScript : MonoBehaviour
@@ -23,6 +21,13 @@ public class PlayerControllerScript : MonoBehaviour
         }
         SceneManager.sceneLoaded += onSceneLoad;
         SceneManager.sceneUnloaded += onSceneUnload;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
     void FixedUpdate()
     {
