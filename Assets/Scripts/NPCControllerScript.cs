@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class NPCControllerScript : MonoBehaviour
 {
@@ -11,6 +10,16 @@ public class NPCControllerScript : MonoBehaviour
     private List<Transform> waypoints;
     private int current;
     private float speed;
+
+    private int newIndex()
+    {
+        return Mathf.FloorToInt(Random.Range(0, waypoints.Count));
+    }
+
+    private float newSpeed()
+    {
+        return Random.Range(minSpeed, maxSpeed);
+    }
 
     private void Start()
     {
@@ -22,15 +31,15 @@ public class NPCControllerScript : MonoBehaviour
                 continue;
             Physics2D.IgnoreCollision(curr, body.GetComponent<CircleCollider2D>());
         }
-
         waypoints = wplist.GetComponentsInChildren<Transform>().ToList();
         waypoints = (from waypoint in waypoints where waypoint.name != wplist.name select waypoint).ToList();
-        transform.position = waypoints[0].position;
-        Vector3 directionToTarget = waypoints[1].position - waypoints[0].position;
+        current = newIndex();
+        transform.position = waypoints[current].position;
+        current = (current + 1)%waypoints.Count;
+        Vector3 directionToTarget = waypoints[current].position - transform.position;
         float targetAngle = Mathf.Atan2(directionToTarget.y,directionToTarget.x)*Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, targetAngle);
-        current = 1;
-        speed = Random.Range(minSpeed, maxSpeed);
+        speed = newSpeed();
         StartCoroutine(Patrol());
     }
 
@@ -41,10 +50,9 @@ public class NPCControllerScript : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, waypoints[current].position, speed * Time.deltaTime);
             if (Vector3.Distance(transform.position, waypoints[current].position) < .001f)
             {
-                float randomNumber = Random.Range(0, waypoints.Count);
-                current = (int)Mathf.Floor(randomNumber);
+                current = newIndex();
                 yield return StartCoroutine(Turn(waypoints[current]));
-                speed = Random.Range(minSpeed, maxSpeed);
+                speed = newSpeed();
             }
             yield return null;
         }

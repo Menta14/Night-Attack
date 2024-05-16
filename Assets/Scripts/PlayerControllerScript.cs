@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,7 +8,9 @@ public class PlayerControllerScript : MonoBehaviour
     public float speed = 2f;
     private SpriteRenderer spr;
     private bool hidden = false;
-
+    public static string question;
+    public static string[] answers;
+    public static string correct;
     void Start()
     {
         GameObject[] wps = GameObject.FindGameObjectsWithTag("Waypoint");
@@ -14,6 +18,7 @@ public class PlayerControllerScript : MonoBehaviour
         {
             wp.GetComponent<SpriteRenderer>().enabled = false;
         }
+        SceneManager.sceneUnloaded += onSceneUnloaded;
     }
     void FixedUpdate()
     {
@@ -27,7 +32,16 @@ public class PlayerControllerScript : MonoBehaviour
         {
             spr.color = Color.black;
             hidden = true;
-            return;
+            TentData data = collision.gameObject.GetComponent<TentData>();
+            if (!data.visited)
+            {
+                data.visited = true;
+                question = data.question;
+                answers = data.answers;
+                correct = data.correct;
+                transform.position = collision.gameObject.GetComponent<Renderer>().bounds.center;
+                StartCoroutine(EnterTent());
+            }
         }
         if (collision.gameObject.tag == "Guard")
         {
@@ -57,5 +71,33 @@ public class PlayerControllerScript : MonoBehaviour
         {
             Destroy(collision.gameObject);
         }
+    }
+
+    private void onSceneUnloaded(Scene unloadedScene)
+    {
+        foreach (GameObject obj in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            obj.SetActive(true);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneUnloaded -= onSceneUnloaded;
+    }
+
+    private IEnumerator EnterTent()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Tent", LoadSceneMode.Additive);
+
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        foreach (GameObject obj in SceneManager.GetActiveScene().GetRootGameObjects())
+        {
+            obj.SetActive(false);
+        }
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Tent"));
     }
 }
