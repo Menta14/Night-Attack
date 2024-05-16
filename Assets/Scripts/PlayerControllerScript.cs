@@ -32,9 +32,11 @@ public class PlayerControllerScript : MonoBehaviour
             spr.color = Color.black;
             hidden = true;
             TentData data = collision.gameObject.GetComponent<TentData>();
-            if (!data.visited)
+            if (!data.guarded)
+                return;
+            if (!data.Visited)
             {
-                data.visited = true;
+                data.Visited = true;
                 question = data.question;
                 answers = data.answers;
                 correct = data.correct;
@@ -51,7 +53,7 @@ public class PlayerControllerScript : MonoBehaviour
         }
         if (collision.gameObject.tag == "Exit")
         {
-            SceneManager.LoadScene("Level 2");
+            SceneManager.LoadScene("Ending");
         }
     }
 
@@ -61,6 +63,9 @@ public class PlayerControllerScript : MonoBehaviour
         {
             spr.color = Color.yellow;
             hidden = false;
+            GameObject trap = collision.GetComponent<TentData>().trap;
+            if (trap != null)
+                trap.SetActive(false);
         }
     }
 

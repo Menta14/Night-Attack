@@ -32,7 +32,10 @@ public class TentManager : MonoBehaviour
                 {
                     string submit = comp.text;
                     if (submit == correct)
+                    {
+                        //remove trap
                         SceneManager.UnloadSceneAsync("Tent");
+                    }
                     else
                         SceneManager.LoadScene("Game over", LoadSceneMode.Additive);
                 }

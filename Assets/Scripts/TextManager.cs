@@ -26,7 +26,10 @@ public class TextManager : MonoBehaviour
         {
             if (current == seq.Count - 1)
             {
-                SceneManager.LoadScene("Level 1");
+                if (SceneManager.GetActiveScene().name == "Intro")
+                    SceneManager.LoadScene("Level 1");
+                else
+                    Application.Quit();
                 return;
             }
             seq[current].enabled = false;
